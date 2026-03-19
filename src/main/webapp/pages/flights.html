@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Airlines — Flights</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/forms.css" />
+  <link rel="stylesheet" href="../css/table.css" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-brand"><div class="brand-icon">✈</div><span class="brand-name">Sky<span>Way</span></span></a>
+      <button class="navbar-toggle" id="navbar-toggle">☰</button>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a class="nav-link" href="index.html" data-page="home"> Home</a></li>
+        <li><a class="nav-link" href="flights.html" data-page="flights">✈ Flights</a></li>
+        <li><a class="nav-link" href="booking.html" data-page="booking"> Book Tickets</a></li>
+        <li><a class="nav-link" href="my-bookings.html" data-page="my-bookings"> My Bookings</a></li>
+        <li><a class="nav-link" href="cancel.html" data-page="cancel"> Cancel</a></li>
+        <li><a class="nav-link" href="revenue.html" data-page="revenue"> Admin <span class="nav-badge">ADMIN</span></a></li>
+        <li><a class="nav-link" href="concurrent-test.html" data-page="concurrent">Concurrent-Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      <span class="section-label">✈ Browse Routes</span>
+      <h1 class="page-title">Available Flights</h1>
+      <p class="page-subtitle">Search, filter and book from our full route network.</p>
+
+      <!-- Alert -->
+      <div id="alertBox" class="alert hidden"></div>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <div class="form-group">
+          <label class="form-label" for="searchSource">From</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🛫</span>
+            <input class="form-control" type="text" id="searchSource" placeholder="Origin city" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="searchDest">To</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🛬</span>
+            <input class="form-control" type="text" id="searchDest" placeholder="Destination city" />
+          </div>
+        </div>
+        <div class="form-group" style="display:flex;gap:0.5rem;align-items:flex-end;margin-bottom:0">
+          <button class="btn btn-primary" id="btnSearch">🔍 Search</button>
+          <button class="btn btn-ghost" id="btnClear">Clear</button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <span class="filter-label">Filter:</span>
+        <button class="btn btn-outline btn-sm active" data-filter="all" data-active="true">All Flights</button>
+        <button class="btn btn-outline btn-sm" data-filter="available">Available Only</button>
+        <button class="btn btn-outline btn-sm" data-filter="price">Sort by Price ↑</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="loadingOverlay" class="loading-overlay">
+        <span class="loading-spinner" style="width:32px;height:32px;border-width:3px"></span>
+        <span>Loading flights…</span>
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">✈</div>
+        <h3>No Flights Found</h3>
+        <p>Try a different route or clear the search filters.</p>
+      </div>
+
+      <!-- Table -->
+      <div id="tableWrapper" class="table-wrapper hidden">
+        <div class="table-header">
+          <span class="table-title">✈ Flight Listings <span class="table-count" id="flightCount">0</span></span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Flight ID</th>
+                <th>Number</th>
+                <th>Route</th>
+                <th>Price</th>
+                <th>Seats</th>
+                <th style="text-align:right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="flightsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2025 SkyWay Airlines</footer>
+</div>
+<script src="../js/transitions.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/flights.js"></script>
+</body>
+</html>

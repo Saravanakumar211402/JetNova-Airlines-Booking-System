@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="32" fill="#060d1a"/>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#00b7ff" stroke-width="1.2" opacity="0.4"/>
+  <text x="32" y="44" font-size="36" text-anchor="middle" fill="#00b7ff">✈</text>
+</svg>

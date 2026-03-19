@@ -1,0 +1,159 @@
+/* =============================================
+   SKYWAY AIRLINES — Table Styles
+   ============================================= */
+
+.table-wrapper {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.table-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.table-count {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+/* Scroll container for mobile */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+thead { background: rgba(0,183,255,0.04); }
+thead th {
+  padding: 0.8rem 1.25rem;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--navy-light);
+  z-index: 1;
+}
+thead th:first-child { padding-left: 1.5rem; }
+thead th:last-child  { padding-right: 1.5rem; text-align: right; }
+
+tbody tr {
+  border-bottom: 1px solid rgba(0,183,255,0.07);
+  transition: background var(--transition);
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(0,183,255,0.04); }
+
+tbody td {
+  padding: 0.9rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+tbody td:first-child { padding-left: 1.5rem; }
+tbody td:last-child  { padding-right: 1.5rem; text-align: right; }
+
+/* Special cells */
+.td-id {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--cyan);
+}
+.td-route {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.td-price {
+  font-family: var(--font-mono);
+  color: var(--gold);
+  font-weight: 700;
+}
+.td-seats { font-family: var(--font-mono); }
+.td-seats.low  { color: var(--red); }
+.td-seats.ok   { color: var(--green); }
+.td-date { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Seats bar */
+.seats-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.seats-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 60px;
+}
+.seats-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--green);
+  transition: width 0.5s ease;
+}
+.seats-fill.low    { background: var(--red); }
+.seats-fill.medium { background: var(--gold); }
+
+/* Sortable header */
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.sortable:hover { color: var(--cyan); }
+.sort-icon { margin-left: 0.3rem; opacity: 0.5; font-size: 0.8em; }
+.sortable.asc  .sort-icon { opacity: 1; content: '↑'; }
+.sortable.desc .sort-icon { opacity: 1; content: '↓'; }
+
+/* Action buttons in table */
+.td-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Table footer / pagination */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.table-summary { font-family: var(--font-mono); }
+
+/* Responsive: stack on very small screens */
+@media (max-width: 400px) {
+  .table-header { flex-direction: column; align-items: flex-start; }
+}

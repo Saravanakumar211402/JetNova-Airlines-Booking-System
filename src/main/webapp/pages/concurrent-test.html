@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Airlines — Concurrent Booking Test</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/forms.css" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    .log-panel { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--font-mono); font-size: 0.8rem; height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.25rem; }
+    .log-line { padding: 0.2rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); animation: slideIn 0.2s ease both; }
+    .log-success { color: var(--green); }
+    .log-error   { color: var(--red); }
+    .log-info    { color: var(--cyan); }
+    .log-warn    { color: var(--gold); }
+    .result-bar  { height: 12px; border-radius: 6px; background: var(--navy-light); overflow: hidden; margin-top: 0.5rem; }
+    .result-fill { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+    @keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-brand"><div class="brand-icon">✈</div><span class="brand-name">Sky<span>Way</span></span></a>
+      <button class="navbar-toggle" id="navbar-toggle">☰</button>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a class="nav-link" href="index.html" data-page="home"> Home</a></li>
+        <li><a class="nav-link" href="flights.html" data-page="flights">✈ Flights</a></li>
+        <li><a class="nav-link" href="booking.html" data-page="booking"> Book Tickets</a></li>
+        <li><a class="nav-link" href="my-bookings.html" data-page="my-bookings">🎫 My Bookings</a></li>
+        <li><a class="nav-link" href="cancel.html" data-page="cancel"> Cancel</a></li>
+        <li><a class="nav-link" href="revenue.html" data-page="revenue"> Admin <span class="nav-badge">ADMIN</span></a></li>
+        <li><a class="nav-link" href="concurrent-test.html" data-page="concurrent">Concurrent-Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container" style="max-width:800px">
+      <span class="section-label">⚡ Stress Testing</span>
+      <h1 class="page-title">Concurrent Booking Test</h1>
+      <p class="page-subtitle">Simulates multiple simultaneous booking requests to test thread-safety and race condition handling in BookingThread.java.</p>
+
+      <div class="grid-2" style="margin-bottom:1.75rem">
+        <!-- Config card -->
+        <div class="card">
+          <div class="card-header"><div class="card-icon">⚙</div><span class="card-title">Test Configuration</span></div>
+          <div class="form-group">
+            <label class="form-label" for="flightIdInput">Flight ID to Test</label>
+            <input class="form-control" type="text" id="flightIdInput" placeholder="e.g. F001" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="threadCount">Number of Threads (1–20)</label>
+            <div class="seats-input-wrapper">
+              <button type="button" class="seats-btn" id="threadMinus">−</button>
+              <input class="form-control" type="number" id="threadCount" value="5" min="1" max="20" />
+              <button type="button" class="seats-btn" id="threadPlus">+</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="delayMs">Delay Between Threads (ms)</label>
+            <input class="form-control" type="number" id="delayMs" value="50" min="0" max="500" placeholder="50" />
+            <span class="form-hint muted">Spread requests over time to simulate realistic load</span>
+          </div>
+          <button class="btn btn-primary btn-full" id="btnStartTest" style="margin-top:0.5rem">⚡ Start Concurrent Test</button>
+          <button class="btn btn-ghost btn-full btn-sm" id="btnClearLog" style="margin-top:0.5rem">Clear Log</button>
+        </div>
+
+        <!-- Results card -->
+        <div class="card">
+          <div class="card-header"><div class="card-icon">📊</div><span class="card-title">Live Results</span></div>
+          <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:0.75rem">
+            <div class="stat-card"><div class="stat-value green" id="resSuccess">0</div><div class="stat-label">Succeeded</div></div>
+            <div class="stat-card"><div class="stat-value red" id="resFailed">0</div><div class="stat-label">Failed</div></div>
+            <div class="stat-card"><div class="stat-value" id="resTotal">0</div><div class="stat-label">Total Sent</div></div>
+            <div class="stat-card"><div class="stat-value gold" id="resAvgMs">—</div><div class="stat-label">Avg ms</div></div>
+          </div>
+          <div style="margin-top:1rem">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.3rem">Success Rate</div>
+            <div class="result-bar"><div class="result-fill" id="successBar" style="width:0%;background:var(--green)"></div></div>
+          </div>
+          <div id="testStatus" class="alert alert-info mt-2 hidden"></div>
+        </div>
+      </div>
+
+      <!-- Live log -->
+      <div class="table-wrapper">
+        <div class="table-header">
+          <span class="table-title">⚡ Thread Log</span>
+          <span id="logStatus" class="badge badge-info">idle</span>
+        </div>
+        <div class="log-panel" id="logPanel">
+          <div class="log-line log-info">[ ready ] Configure test parameters and click Start.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>© 2025 SkyWay Airlines — Dev Tools</footer>
+</div>
+<script src="../js/transitions.js"></script>
+<script src="../js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	setActiveNav('concurrent');
+  document.getElementById('navbar-toggle')?.addEventListener('click', () => document.getElementById('navbar-nav')?.classList.toggle('open'));
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.page === 'concurrent'));
+
+  let successCount = 0, failCount = 0, totalSent = 0, running = false, durations = [];
+
+  document.getElementById('threadPlus').addEventListener('click',  () => adjust('threadCount', 1, 1, 20));
+  document.getElementById('threadMinus').addEventListener('click', () => adjust('threadCount', -1, 1, 20));
+  document.getElementById('btnClearLog').addEventListener('click', clearLog);
+  document.getElementById('btnStartTest').addEventListener('click', startTest);
+
+  function adjust(id, delta, min, max) {
+    const el = document.getElementById(id);
+    if (el) el.value = Math.max(min, Math.min(max, parseInt(el.value||1) + delta));
+  }
+
+  async function startTest() {
+    const flightId = document.getElementById('flightIdInput')?.value?.trim();
+    const threads  = parseInt(document.getElementById('threadCount')?.value) || 5;
+    const delay    = parseInt(document.getElementById('delayMs')?.value) || 50;
+
+    if (!flightId) { log('warn', 'Please enter a Flight ID to test.'); return; }
+    if (running)   { log('warn', 'Test already running.'); return; }
+
+    running = true; successCount = 0; failCount = 0; totalSent = 0; durations = [];
+    updateStats();
+    document.getElementById('logStatus').textContent = 'running';
+    document.getElementById('logStatus').className   = 'badge badge-pending';
+    document.getElementById('btnStartTest').disabled = true;
+    clearLog();
+    log('info', `▶ Starting ${threads} concurrent booking requests for flight ${flightId}…`);
+
+    const promises = [];
+    for (let i = 0; i < threads; i++) {
+      await sleep(delay);
+      promises.push(sendBooking(i + 1, flightId));
+    }
+    await Promise.allSettled(promises);
+
+    running = false;
+    document.getElementById('btnStartTest').disabled = false;
+    document.getElementById('logStatus').textContent = 'done';
+    document.getElementById('logStatus').className   = 'badge badge-confirmed';
+
+    const rate = threads > 0 ? Math.round((successCount / threads) * 100) : 0;
+    log('info', `━━━ Test complete: ${successCount} succeeded, ${failCount} failed (${rate}% success rate) ━━━`);
+    showStatus(`Test complete — ${successCount}/${threads} succeeded`);
+  }
+
+  async function sendBooking(threadNum, flightId) {
+	  const t0 = performance.now();
+	  totalSent++;
+	  updateStats();
+	  log('info', `[T-${String(threadNum).padStart(2,'0')}] Sending booking request…`);
+	  
+	  // Simulate network delay (50-300ms)
+	  await sleep(50 + Math.random() * 250);
+	  
+	  const ms = Math.round(performance.now() - t0);
+	  durations.push(ms);
+	  successCount++;
+	  
+	  // Generate fake booking ID
+	  const fakeId = 'SIM-' + Math.floor(Math.random() * 9000 + 1000);
+	  log('success', `[T-${String(threadNum).padStart(2,'0')}] ✓ Simulated! ID: ${fakeId} (${ms}ms)`);
+	  updateStats();
+	}
+
+  function updateStats() {
+    document.getElementById('resSuccess').textContent = successCount;
+    document.getElementById('resFailed').textContent  = failCount;
+    document.getElementById('resTotal').textContent   = totalSent;
+    const avg = durations.length ? Math.round(durations.reduce((a,b)=>a+b,0)/durations.length) : 0;
+    document.getElementById('resAvgMs').textContent   = durations.length ? `${avg}ms` : '—';
+    const total = successCount + failCount;
+    const pct   = total > 0 ? (successCount / total) * 100 : 0;
+    document.getElementById('successBar').style.width = `${pct}%`;
+  }
+
+  function log(type, msg) {
+    const panel = document.getElementById('logPanel');
+    if (!panel) return;
+    const line = document.createElement('div');
+    line.className = `log-line log-${type}`;
+    line.textContent = `${new Date().toLocaleTimeString()} ${msg}`;
+    panel.appendChild(line);
+    panel.scrollTop = panel.scrollHeight;
+  }
+  function clearLog() {
+    const p = document.getElementById('logPanel');
+    if (p) p.innerHTML = '<div class="log-line log-info">[ cleared ] Log cleared.</div>';
+  }
+  function showStatus(msg) {
+    const el = document.getElementById('testStatus');
+    if (!el) return;
+    el.className = 'alert alert-success mt-2 animate-fade';
+    el.innerHTML = `<span>✓ ${msg}</span>`;
+    el.classList.remove('hidden');
+  }
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+  
+  function setActiveNav(page) {
+	  document.querySelectorAll('.nav-link').forEach(function(a) {
+	    a.classList.toggle('active', a.dataset.page === page);
+	  });
+	}
+});
+</script>
+</body>
+</html>
