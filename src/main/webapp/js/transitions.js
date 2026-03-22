@@ -82,7 +82,7 @@
   loader.innerHTML =
     '<div class="sky-loader-plane">✈</div>' +
     '<div class="sky-loader-bar-track"><div class="sky-loader-bar-fill"></div></div>' +
-    '<div class="sky-loader-text">Loading SkyWay&hellip;</div>';
+    '<div class="sky-loader-text">Loading JETNOVA&hellip;</div>';
 
   var exitOverlay = document.createElement('div');
   exitOverlay.id = 'sky-exit';
