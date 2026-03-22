@@ -1,36 +1,31 @@
 package airlinebookingapp.util;
 
 import java.sql.*;
-import java.net.URI;
 
 public class DBConnection {
 
     public static Connection getConnection() {
         try {
-            Class.forName("org.postgresql.Driver");
-            
-            String databaseUrl = System.getenv("DATABASE_URL");
-            
-            if (databaseUrl != null) {
-                // Parse Railway URL: postgresql://user:password@host:port/db
-                URI uri = new URI(databaseUrl);
-                String host     = uri.getHost();
-                int    port     = uri.getPort();
-                String db       = uri.getPath().substring(1);
-                String userInfo = uri.getUserInfo();
-                String user     = userInfo.split(":")[0];
-                String password = userInfo.split(":")[1];
-                String url      = "jdbc:postgresql://" + host + ":" + port + "/" + db;
-                
-                System.out.println("Connecting to: " + url);
-                return DriverManager.getConnection(url, user, password);
+            // Railway environment variables
+            String host = System.getenv("PGHOST");
+            String port = System.getenv("PGPORT");
+            String db   = System.getenv("PGDATABASE");
+            String user = System.getenv("PGUSER");
+            String pass = System.getenv("PGPASSWORD");
+
+            if (host != null && port != null && db != null && user != null && pass != null) {
+                String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + db;
+                System.out.println("Connecting via Railway PG variables");
+                Class.forName("org.postgresql.Driver");
+                return DriverManager.getConnection(jdbcUrl, user, pass);
             } else {
-                System.out.println("Connecting to localhost");
-                return DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/airline_db", 
-                    "postgres", 
-                    "2114"
-                );
+                // Local development fallback
+                String url      = "jdbc:postgresql://localhost:5432/airline_db";
+                String localUser     = "postgres";
+                String localPassword = "2114";
+                System.out.println("Connecting via localhost (local)");
+                Class.forName("org.postgresql.Driver");
+                return DriverManager.getConnection(url, localUser, localPassword);
             }
 
         } catch (SQLException e) {
