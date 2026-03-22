@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JetNova Airlines — Cancel Booking</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/forms.css" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-brand"><div class="brand-icon">✈</div><span class="brand-name">JET<span>NOVA</span></span></a>
+      <button class="navbar-toggle" id="navbar-toggle">☰</button>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a class="nav-link" href="pages/index.html" data-page="home"> Home</a></li>
+        <li><a class="nav-link" href="pages/flights.html" data-page="flights">✈ Flights</a></li>
+        <li><a class="nav-link" href="pages/booking.html" data-page="booking"> Book Tickets</a></li>
+        <li><a class="nav-link" href="pages/my-bookings.html" data-page="my-bookings"> My Bookings</a></li>
+        <li><a class="nav-link" href="pages/cancel.html" data-page="cancel"> Cancel</a></li>
+        <li><a class="nav-link" href="pages/revenue.html" data-page="revenue"> Admin <span class="nav-badge">ADMIN</span></a></li>
+        <li><a class="nav-link" href="pages/concurrent-test.html" data-page="concurrent">Concurrent-Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container" style="max-width:680px">
+      <span class="section-label">❌ Cancellation</span>
+      <h1 class="page-title">Cancel a Booking</h1>
+      <p class="page-subtitle">Enter your Booking ID to look up and cancel your reservation.</p>
+
+      <div id="alertBox" class="alert hidden"></div>
+
+      <!-- Search -->
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header"><div class="card-icon">🔍</div><span class="card-title">Find Booking</span></div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <div class="input-wrapper" style="flex:1;min-width:200px">
+            <span class="input-icon">🎫</span>
+            <input class="form-control" type="text" id="bookingIdInput" placeholder="e.g. B123" style="padding-left:2.4rem" />
+          </div>
+          <button class="btn btn-primary" id="btnSearchBooking">🔍 Search</button>
+        </div>
+      </div>
+
+      <!-- Booking card (hidden until found) -->
+      <div id="bookingCard" class="card hidden" style="margin-bottom:1.5rem">
+        <div class="card-header">
+          <div class="card-icon">🎫</div>
+          <span class="card-title">Booking Details</span>
+          <span id="bc-status" class="badge badge-confirmed" style="margin-left:auto">CONFIRMED</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="info-row"><span class="info-label">Booking ID</span><span class="info-value mono text-cyan" id="bc-booking-id">—</span></div>
+            <div class="info-row"><span class="info-label">Passenger</span><span class="info-value" id="bc-passenger">—</span></div>
+            <div class="info-row"><span class="info-label">Passenger ID</span><span class="info-value mono" id="bc-passenger-id">—</span></div>
+          </div>
+          <div>
+            <div class="info-row"><span class="info-label">Flight</span><span class="info-value mono" id="bc-flight">—</span></div>
+            <div class="info-row"><span class="info-label">Route</span><span class="info-value" id="bc-route">—</span></div>
+            <div class="info-row"><span class="info-label">Seats</span><span class="info-value" id="bc-seats">—</span></div>
+            <div class="info-row"><span class="info-label">Fare Paid</span><span class="info-value price-tag" id="bc-fare">—</span></div>
+            <div class="info-row"><span class="info-label">Date</span><span class="info-value" id="bc-date">—</span></div>
+          </div>
+        </div>
+        <hr class="divider" />
+        <div id="alreadyCancelledMsg" class="alert alert-warning hidden">
+          <span class="alert-icon">⚠</span><span>This booking has already been cancelled.</span>
+        </div>
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="document.getElementById('bookingCard').classList.add('hidden')">Close</button>
+          <button class="btn btn-outline" id="btnShowCancelConfirm">Request Cancellation</button>
+        </div>
+      </div>
+
+      <!-- Confirm panel -->
+      <div id="confirmPanel" class="card hidden" style="border-color:rgba(255,77,109,0.3);background:rgba(255,77,109,0.04)">
+        <div class="card-header"><div class="card-icon" style="background:rgba(255,77,109,0.1);border-color:rgba(255,77,109,0.3)">⚠</div><span class="card-title text-red">Confirm Cancellation</span></div>
+        <p style="margin-bottom:1.25rem;font-size:0.9rem">Are you sure you want to cancel this booking? This action <strong style="color:var(--text-primary)">cannot be undone</strong>.</p>
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end">
+          <button class="btn btn-ghost" id="btnConfirmNo">Keep Booking</button>
+          <button class="btn btn-danger" id="btnConfirmCancel">🗑 Cancel This Booking</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>© 2025 JetNova Airlines</footer>
+</div>
+<script src="../js/transitions.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/cancel.js"></script>
+</body>
+</html>

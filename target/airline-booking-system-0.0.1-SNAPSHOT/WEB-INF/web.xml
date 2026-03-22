@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0"
+         metadata-complete="true">
+
+  <display-name>SkyWay Airline Booking System</display-name>
+
+  <welcome-file-list>
+    <welcome-file>pages/index.html</welcome-file>
+  </welcome-file-list>
+
+  <!-- FlightServlet -->
+  <servlet>
+    <servlet-name>FlightServlet</servlet-name>
+    <servlet-class>airlinebookingapp.servlet.FlightServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FlightServlet</servlet-name>
+    <url-pattern>/api/flights</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FlightServlet</servlet-name>
+    <url-pattern>/api/flights/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- BookingServlet -->
+  <servlet>
+    <servlet-name>BookingServlet</servlet-name>
+    <servlet-class>airlinebookingapp.servlet.BookingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BookingServlet</servlet-name>
+    <url-pattern>/api/bookings</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BookingServlet</servlet-name>
+    <url-pattern>/api/bookings/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- PassengerServlet -->
+  <servlet>
+    <servlet-name>PassengerServlet</servlet-name>
+    <servlet-class>airlinebookingapp.servlet.PassengerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PassengerServlet</servlet-name>
+    <url-pattern>/api/passengers</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PassengerServlet</servlet-name>
+    <url-pattern>/api/passengers/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- RevenueServlet -->
+  <servlet>
+    <servlet-name>RevenueServlet</servlet-name>
+    <servlet-class>airlinebookingapp.servlet.RevenueServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RevenueServlet</servlet-name>
+    <url-pattern>/api/revenue</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/pages/index.html</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/pages/index.html</location>
+  </error-page>
+
+</web-app>

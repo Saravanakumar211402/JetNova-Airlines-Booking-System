@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JetNova Airlines — My Bookings</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/forms.css" />
+  <link rel="stylesheet" href="../css/table.css" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-brand"><div class="brand-icon">✈</div><span class="brand-name">JET<span>NOVA</span></span></a>
+      <button class="navbar-toggle" id="navbar-toggle">☰</button>
+      <ul class="navbar-nav" id="navbar-nav">
+        <li><a class="nav-link" href="pages/index.html" data-page="home"> Home</a></li>
+        <li><a class="nav-link" href="pages/flights.html" data-page="flights">✈ Flights</a></li>
+        <li><a class="nav-link" href="pages/booking.html" data-page="booking"> Book Tickets</a></li>
+        <li><a class="nav-link" href="pages/my-bookings.html" data-page="my-bookings"> My Bookings</a></li>
+        <li><a class="nav-link" href="pages/cancel.html" data-page="cancel"> Cancel</a></li>
+        <li><a class="nav-link" href="pages/revenue.html" data-page="revenue"> Admin <span class="nav-badge">ADMIN</span></a></li>
+        <li><a class="nav-link" href="pages/concurrent-test.html" data-page="concurrent">Concurrent-Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      <span class="section-label">🎫 Travel History</span>
+      <h1 class="page-title">My Bookings</h1>
+      <p class="page-subtitle">Enter your Passenger ID to view all your reservations.</p>
+
+      <div id="alertBox" class="alert hidden"></div>
+
+      <!-- Lookup -->
+      <div class="card" style="margin-bottom:1.75rem;max-width:520px">
+        <div class="card-header"><div class="card-icon">👤</div><span class="card-title">Passenger Lookup</span></div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <div class="input-wrapper" style="flex:1;min-width:180px">
+            <span class="input-icon">🆔</span>
+            <input class="form-control" type="text" id="passengerIdInput" placeholder="e.g. P123" />
+          </div>
+          <button class="btn btn-primary" id="btnFetchBookings">🔍 View Bookings</button>
+        </div>
+      </div>
+
+      <!-- Results (hidden until fetched) -->
+      <div id="resultsSection" class="hidden">
+        <!-- Passenger card -->
+        <div id="passengerCard" class="card hidden" style="margin-bottom:1.5rem;max-width:520px">
+          <div class="card-header"><div class="card-icon">👤</div><span class="card-title">Passenger Info</span></div>
+          <div class="grid-2">
+            <div>
+              <div class="info-row"><span class="info-label">ID</span><span class="info-value mono text-cyan" id="pc-id">—</span></div>
+              <div class="info-row"><span class="info-label">Name</span><span class="info-value" id="pc-name">—</span></div>
+            </div>
+            <div>
+              <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="pc-email">—</span></div>
+              <div class="info-row"><span class="info-label">Phone</span><span class="info-value mono" id="pc-phone">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="stats-grid stagger" style="grid-template-columns:repeat(3,1fr);max-width:540px;margin-bottom:1.5rem">
+          <div class="stat-card"><div class="stat-value" id="sumTotal">0</div><div class="stat-label">Total</div></div>
+          <div class="stat-card"><div class="stat-value green" id="sumActive">0</div><div class="stat-label">Active</div></div>
+          <div class="stat-card"><div class="stat-value red" id="sumCancelled">0</div><div class="stat-label">Cancelled</div></div>
+        </div>
+
+        <!-- Table -->
+        <div id="tableWrapper" class="table-wrapper hidden">
+          <div class="table-header">
+            <span class="table-title">🎫 Bookings <span class="table-count" id="bookingCount">0</span></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr>
+                <th>Booking ID</th><th>Flight ID</th><th>Route</th>
+                <th>Status</th><th>Fare</th><th>Date</th>
+                <th style="text-align:right">Action</th>
+              </tr></thead>
+              <tbody id="bookingsBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-state-icon">🎫</div>
+          <h3>No Bookings Found</h3>
+          <p>No bookings found for this passenger ID.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>© 2025 JetNova Airlines</footer>
+</div>
+<script src="../js/transitions.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/my-bookings.js"></script>
+</body>
+</html>
