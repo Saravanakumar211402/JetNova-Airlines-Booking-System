@@ -14,12 +14,13 @@ public class DBConnection {
         return "jdbc:postgresql://localhost:5432/airline_db";
     }
 
-    private static final String URL      = getUrl();
-    private static final String USER     = System.getenv("PGUSER")     != null ? System.getenv("PGUSER")     : "postgres";
-    private static final String PASSWORD = System.getenv("PGPASSWORD") != null ? System.getenv("PGPASSWORD") : "2114";
+    
 
     public static Connection getConnection() {
         try {
+        	 String URL      = getUrl();
+             String USER     = System.getenv("PGUSER")     != null ? System.getenv("PGUSER")     : "postgres";
+             String PASSWORD = System.getenv("PGPASSWORD") != null ? System.getenv("PGPASSWORD") : "2114";
             Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
