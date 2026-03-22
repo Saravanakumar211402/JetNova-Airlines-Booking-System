@@ -2,7 +2,9 @@
    SKYWAY AIRLINES — Centralized API Layer
    ============================================= */
 
-var API_BASE = '/airline-booking-system/api';
+   var API_BASE = window.location.hostname === 'localhost' 
+       ? '/airline-booking-system/api' 
+       : '/api';
 
 function apiFetch(url, options) {
   var config = Object.assign({ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }, options || {});
