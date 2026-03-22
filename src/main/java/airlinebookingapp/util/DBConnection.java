@@ -6,22 +6,24 @@ public class DBConnection {
 
     public static Connection getConnection() {
         try {
-            String host     = System.getenv("PGHOST");
-            String db       = System.getenv("PGDATABASE");
-            String port     = System.getenv("PGPORT") != null ? System.getenv("PGPORT") : "5432";
-            String user     = System.getenv("PGUSER") != null ? System.getenv("PGUSER") : "postgres";
-            String password = System.getenv("PGPASSWORD") != null ? System.getenv("PGPASSWORD") : "2114";
-
-            String url;
-            if (host != null && db != null) {
-                url = "jdbc:postgresql://" + host + ":" + port + "/" + db;
+            String databaseUrl = System.getenv("DATABASE_URL");
+            
+            if (databaseUrl != null) {
+                // Railway provides: postgresql://user:password@host:port/db
+                // Convert to JDBC format
+                String jdbcUrl = databaseUrl.replace("postgresql://", "jdbc:postgresql://");
+                System.out.println("Connecting via DATABASE_URL (Railway)");
+                Class.forName("org.postgresql.Driver");
+                return DriverManager.getConnection(jdbcUrl);
             } else {
-                url = "jdbc:postgresql://localhost:5432/airline_db";
+                // Local development
+                String url      = "jdbc:postgresql://localhost:5432/airline_db";
+                String user     = "postgres";
+                String password = "2114";
+                System.out.println("Connecting via localhost (local)");
+                Class.forName("org.postgresql.Driver");
+                return DriverManager.getConnection(url, user, password);
             }
-
-            System.out.println("Connecting to: " + url);
-            Class.forName("org.postgresql.Driver");
-            return DriverManager.getConnection(url, user, password);
 
         } catch (SQLException e) {
             System.out.println("Connection failed: " + e.getMessage());
