@@ -15,7 +15,12 @@ public class DBConnection {
 
             if (host != null && port != null && db != null && user != null && pass != null) {
                 String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + db;
+
+                // Debug logs (safe — no password printed)
                 System.out.println("Connecting via Railway PG variables");
+                System.out.println("JDBC URL: " + jdbcUrl);
+                System.out.println("User: " + user);
+
                 Class.forName("org.postgresql.Driver");
                 return DriverManager.getConnection(jdbcUrl, user, pass);
             } else {
@@ -23,7 +28,9 @@ public class DBConnection {
                 String url      = "jdbc:postgresql://localhost:5432/airline_db";
                 String localUser     = "postgres";
                 String localPassword = "2114";
+
                 System.out.println("Connecting via localhost (local)");
+
                 Class.forName("org.postgresql.Driver");
                 return DriverManager.getConnection(url, localUser, localPassword);
             }
