@@ -15,7 +15,7 @@ Java Servlets and JDBC — no Spring, no Hibernate, pure Java.
 ## Tech Stack
 | Layer | Technology |
 |---|---|
-| Frontend | HTML, CSS, Vanilla JavaScript |
+| Frontend | HTML, CSS, JavaScript |
 | Backend | Java Servlets (Jakarta EE) |
 | Database | PostgreSQL + JDBC |
 | Server | Apache Tomcat 10.1 |
